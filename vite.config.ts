@@ -4,6 +4,7 @@ import rsc from "@vitejs/plugin-rsc";
 import { defineConfig } from "vite";
 import devtoolsJson from "vite-plugin-devtools-json";
 import tsconfigPaths from "vite-tsconfig-paths";
+import path from "path";
 
 export default defineConfig({
   plugins: [
@@ -13,4 +14,9 @@ export default defineConfig({
     rsc(),
     devtoolsJson(),
   ],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./app"),
+    },
+  },
 });
