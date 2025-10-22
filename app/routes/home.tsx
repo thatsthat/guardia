@@ -1,5 +1,6 @@
 import type { Route } from "./+types/home";
 import { Button } from "@/components/ui/button";
+import { MoreData } from "@/components/shared/MoreData";
 import { Form, redirect } from "react-router";
 import { Input } from "@/components/ui/input";
 import {
@@ -29,9 +30,19 @@ export async function action({ request }: Route.ActionArgs) {
 export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
   const keyword = url.searchParams.get("keyword") ?? "";
+  const lastCursor = url.searchParams.get("cursor") ?? null;
+
   const chapters = await prisma.chapter.findMany({
+    ...(lastCursor && {
+      skip: 1,
+      cursor: {
+        id: parseInt(lastCursor),
+      },
+    }),
+    take: 10,
     where: keyword ? { title: { contains: keyword, mode: "insensitive" } } : {},
   });
+  //const newCursor = chapters[chapters.length - 1].id;
   return { chapters };
 }
 
@@ -39,7 +50,6 @@ export function ServerComponent({
   actionData,
   loaderData,
 }: Route.ComponentProps) {
-  console.log(actionData);
   const chapters = loaderData.chapters;
 
   return (
@@ -50,7 +60,7 @@ export function ServerComponent({
           <Button type="submit">Search</Button>
         </div>
       </Form>
-
+      <MoreData cursor={chapters[chapters.length - 1].id} />
       {chapters.map((chapter) => {
         return (
           <Card className="min-w-md" key={chapter.id}>
