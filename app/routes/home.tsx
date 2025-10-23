@@ -3,15 +3,6 @@ import { Button } from "@/components/ui/button";
 import { MoreData } from "@/components/shared/MoreData";
 import { Form, redirect } from "react-router";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import prisma from "@/lib/prisma";
 
 export function meta({}: Route.MetaArgs) {
@@ -31,6 +22,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
   const keyword = url.searchParams.get("keyword") ?? "";
   const lastCursor = url.searchParams.get("cursor") ?? null;
+  const more = url.searchParams.get("more") ?? "0";
 
   const chapters = await prisma.chapter.findMany({
     ...(lastCursor && {
@@ -39,11 +31,11 @@ export async function loader({ request }: Route.LoaderArgs) {
         id: parseInt(lastCursor),
       },
     }),
-    take: 10,
+    take: 5,
     where: keyword ? { title: { contains: keyword, mode: "insensitive" } } : {},
   });
   //const newCursor = chapters[chapters.length - 1].id;
-  return { chapters };
+  return { chapters, more };
 }
 
 export function ServerComponent({
@@ -60,25 +52,13 @@ export function ServerComponent({
           <Button type="submit">Search</Button>
         </div>
       </Form>
-      <MoreData cursor={chapters[chapters.length - 1].id} />
-      {chapters.map((chapter) => {
-        return (
-          <Card className="min-w-md" key={chapter.id}>
-            <CardHeader>
-              <CardTitle>{chapter.title}</CardTitle>
-              <CardDescription>{chapter.summary}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>
-                {"Aired: "}
-                {new Intl.DateTimeFormat("en-GB").format(
-                  new Date(chapter.aired)
-                )}
-              </p>
-            </CardContent>
-          </Card>
-        );
-      })}
+      {!!chapters.length && (
+        <MoreData
+          chapters={loaderData.chapters}
+          cursor={chapters[chapters.length - 1].id}
+          more={loaderData.more}
+        />
+      )}
     </div>
   );
 }
