@@ -68,7 +68,9 @@ export function MoreData({ chapters, cursor, more }: PropsType) {
           );
         })}
       {chapters.length === 10 && (
-        <Button onClick={handleMoreClick}>More</Button>
+        <Button onClick={handleMoreClick} className="cursor-pointer">
+          More
+        </Button>
       )}
     </>
   );
