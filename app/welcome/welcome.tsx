@@ -2,6 +2,7 @@ import logoDark from "./logo-dark.svg";
 import logoLight from "./logo-light.svg";
 
 export function Welcome() {
+  console.log(import.meta.env.VITE_DATABASE_URL);
   return (
     <main className="flex justify-center items-center pt-16 pb-4">
       <div className="flex flex-col flex-1 gap-16 items-center min-h-0">

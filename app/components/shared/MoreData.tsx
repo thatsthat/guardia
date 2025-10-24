@@ -15,7 +15,7 @@ import {
 
 type Chapter = {
   id: number;
-  aired: string;
+  aired: Date;
   summary: string;
   title: string;
   url: string;
@@ -30,7 +30,7 @@ type PropsType = {
 export function MoreData({ chapters, cursor, more }: PropsType) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [chaptersList, setChaptersList] = useState<Chapter[]>([]);
-  console.log(chapters);
+  console.log(import.meta.env.VITE_DATABASE_URL);
 
   const handleMoreClick = () => {
     const keyword = searchParams.get("keyword") ?? "";
@@ -66,7 +66,9 @@ export function MoreData({ chapters, cursor, more }: PropsType) {
             </Card>
           );
         })}
-      {chapters.length === 5 && <Button onClick={handleMoreClick}>More</Button>}
+      {chapters.length === 10 && (
+        <Button onClick={handleMoreClick}>More</Button>
+      )}
     </>
   );
 }

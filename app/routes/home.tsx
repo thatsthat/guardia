@@ -31,7 +31,7 @@ export async function loader({ request }: Route.LoaderArgs) {
         id: parseInt(lastCursor),
       },
     }),
-    take: 5,
+    take: 10,
     where: keyword ? { title: { contains: keyword, mode: "insensitive" } } : {},
   });
   //const newCursor = chapters[chapters.length - 1].id;
@@ -43,7 +43,6 @@ export function ServerComponent({
   loaderData,
 }: Route.ComponentProps) {
   const chapters = loaderData.chapters;
-
   return (
     <div className="flex flex-col items-center gap-4 mt-10">
       <Form method="post">
@@ -55,7 +54,7 @@ export function ServerComponent({
       {!!chapters.length && (
         <MoreData
           chapters={loaderData.chapters}
-          cursor={chapters[chapters.length - 1].id}
+          cursor={chapters[chapters.length - 1].id.toString()}
           more={loaderData.more}
         />
       )}
