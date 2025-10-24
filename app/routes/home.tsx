@@ -44,20 +44,22 @@ export function ServerComponent({
 }: Route.ComponentProps) {
   const chapters = loaderData.chapters;
   return (
-    <div className="flex flex-col items-center gap-4 mt-10">
-      <Form method="post">
-        <div className="flex max-w-sm gap-5 sm:min-w-md">
-          <Input type="text" name="search" />
-          <Button type="submit">Search</Button>
-        </div>
-      </Form>
-      {!!chapters.length && (
-        <MoreData
-          chapters={loaderData.chapters}
-          cursor={chapters[chapters.length - 1].id.toString()}
-          more={loaderData.more}
-        />
-      )}
+    <div className="w-screen flex flex-col items-center">
+      <div className="flex flex-col gap-4 m-10 max-w-md">
+        <Form method="post">
+          <div className="flex gap-5 sm:min-w-md max-w-md">
+            <Input type="text" name="search" />
+            <Button type="submit">Search</Button>
+          </div>
+        </Form>
+        {!!chapters.length && (
+          <MoreData
+            chapters={loaderData.chapters}
+            cursor={chapters[chapters.length - 1].id.toString()}
+            more={loaderData.more}
+          />
+        )}
+      </div>
     </div>
   );
 }

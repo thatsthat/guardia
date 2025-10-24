@@ -50,7 +50,7 @@ export function MoreData({ chapters, cursor, more }: PropsType) {
         chaptersList.map((chapter) => {
           return (
             <Link to={chapter.url} target="_blank">
-              <Card className="min-w-sm sm:min-w-md" key={chapter.id}>
+              <Card className="sm:min-w-md" key={chapter.id}>
                 <CardHeader>
                   <CardTitle>{chapter.title}</CardTitle>
                   <CardDescription>{chapter.summary}</CardDescription>
