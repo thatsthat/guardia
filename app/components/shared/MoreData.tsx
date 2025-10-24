@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router";
+import { useSearchParams, Link } from "react-router";
 import {
   Card,
   CardAction,
@@ -30,7 +30,6 @@ type PropsType = {
 export function MoreData({ chapters, cursor, more }: PropsType) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [chaptersList, setChaptersList] = useState<Chapter[]>([]);
-  console.log(import.meta.env.VITE_DATABASE_URL);
 
   const handleMoreClick = () => {
     const keyword = searchParams.get("keyword") ?? "";
@@ -50,20 +49,22 @@ export function MoreData({ chapters, cursor, more }: PropsType) {
       {!!chaptersList.length &&
         chaptersList.map((chapter) => {
           return (
-            <Card className="min-w-md" key={chapter.id}>
-              <CardHeader>
-                <CardTitle>{chapter.title}</CardTitle>
-                <CardDescription>{chapter.summary}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p>
-                  {"Aired: "}
-                  {new Intl.DateTimeFormat("en-GB").format(
-                    new Date(chapter.aired)
-                  )}
-                </p>
-              </CardContent>
-            </Card>
+            <Link to={chapter.url} target="_blank">
+              <Card className="min-w-md" key={chapter.id}>
+                <CardHeader>
+                  <CardTitle>{chapter.title}</CardTitle>
+                  <CardDescription>{chapter.summary}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p>
+                    {"Aired: "}
+                    {new Intl.DateTimeFormat("en-GB").format(
+                      new Date(chapter.aired)
+                    )}
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
           );
         })}
       {chapters.length === 10 && (
