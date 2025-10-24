@@ -46,7 +46,7 @@ export function ServerComponent({
   return (
     <div className="flex flex-col items-center gap-4 mt-10">
       <Form method="post">
-        <div className="flex max-w-sm gap-5 min-w-md">
+        <div className="flex max-w-sm gap-5 sm:min-w-md">
           <Input type="text" name="search" />
           <Button type="submit">Search</Button>
         </div>
