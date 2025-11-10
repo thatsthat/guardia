@@ -12,3 +12,7 @@
 /app/generated/prisma
 
 /app/generated/prisma
+
+*.json
+
+tags.ts
