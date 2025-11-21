@@ -1,7 +1,7 @@
 import { chapters } from "./tags.ts";
-import { PrismaClient } from "./app/generated/prisma/client.ts";
+//import { PrismaClient } from "./app/generated/prisma/client.ts";
 
-const prisma = new PrismaClient();
+//const prisma = new PrismaClient();
 
 /* const empty = [];
 

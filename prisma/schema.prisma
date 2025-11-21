@@ -9,19 +9,25 @@ datasource db {
 }
 
 model Chapter {
-  id              Int       @id @default(autoincrement())
-  aired           DateTime
-  summary         String
-  transcription   String
-  audio           String
-  url             String
-  title           String    @db.VarChar(255)
-  tags            Tag[] 
-
+  id            Int      @id @default(autoincrement())
+  aired         DateTime
+  summary       String
+  url           String
+  title         String   @db.VarChar(255)
+  transcription String
+  audio         String
+  tags          Tag[]    @relation("ChapterToTag")
 }
 
 model Tag {
-  id        Int         @id @default(autoincrement())
-  name      String      @unique
-  chapters  Chapter[] 
+  id                    Int           @id @default(autoincrement())
+  name                  String        @unique
+  chapters              Chapter[]     @relation("ChapterToTag")
+  active_in_sessions    Session[]     @relation("SessionToTag")
+}
+
+model Session {
+  id            Int     @id @default(autoincrement())
+  session_uid   String  @unique
+  tags          Tag[]   @relation("SessionToTag")
 }

@@ -30,20 +30,19 @@ type PropsType = {
 export function MoreData({ chapters, cursor, more }: PropsType) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [chaptersList, setChaptersList] = useState<Chapter[]>([]);
-
   const handleMoreClick = () => {
     const keyword = searchParams.get("keyword") ?? "";
     setSearchParams({ cursor: cursor, keyword: keyword!, more: "1" });
   };
 
   useEffect(() => {
+    console.log("iepiep");
     if (chapters.length) {
       if (more === "1") {
         setChaptersList((prev) => [...prev, ...chapters]);
       } else setChaptersList(chapters);
     }
   }, [chapters]);
-
   return (
     <>
       {!!chaptersList.length &&

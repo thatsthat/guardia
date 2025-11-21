@@ -4,10 +4,14 @@ import rsc from "@vitejs/plugin-rsc";
 import { defineConfig } from "vite";
 import devtoolsJson from "vite-plugin-devtools-json";
 import tsconfigPaths from "vite-tsconfig-paths";
+import { denyImports } from "vite-env-only";
 import path from "path";
 
 export default defineConfig({
   plugins: [
+    denyImports({
+      client: { files: ["**/.server/*", "**/*.server.*"] },
+    }),
     tailwindcss(),
     tsconfigPaths(),
     reactRouterRSC(),
