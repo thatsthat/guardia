@@ -3,12 +3,14 @@
 import { enableTag, disableTag } from "~/db";
 
 export async function updateTag(formData: FormData) {
-  /*  let tagId = formData.get("id");
-  let intent = formData.get("intent");
-  if (intent === "add") {
-    await addSessionFavorite(Number(movieId));
+  const intent = formData.get("intent");
+  const tagId = parseInt(formData.get("tagId") as string);
+  const sessionId = formData.get("sessionId") as string;
+
+  if (intent === "disable") {
+    await disableTag(sessionId, tagId);
   } else {
-    await removeSessionFavorite(Number(movieId));
-  } */
-  console.log("button clicked - server");
+    await enableTag(sessionId, tagId);
+  }
+  console.log(formData.get("intent"));
 }

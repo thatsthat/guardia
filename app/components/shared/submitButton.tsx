@@ -21,11 +21,10 @@ export function SubmitButton({ isActive, name }: PropsType) {
   let { pending } = useFormStatus();
 
   return (
-    <SidebarMenuButton asChild>
+    <SidebarMenuButton asChild isActive={isActive}>
       <button
         type="submit"
         onClick={(event) => {
-          console.log("button clicked - client");
           if (pending) event.preventDefault();
         }}
       >

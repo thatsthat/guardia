@@ -29,11 +29,11 @@ export async function loader({ request }: Route.LoaderArgs) {
   const cookieHeader = request.headers.get("Cookie"); // read cookie header
   const session = await storage.getSession(cookieHeader); // parse cookie header
   const sessionId = session.get("_id");
-  const chapters = await getChapters(keyword, lastCursor);
+  const allTags = await listAllTags();
   const activeTags = await getActiveTags(sessionId);
-  //const newCursor = chapters[chapters.length - 1].id;
-  console.log(sessionId);
-  return { activeTags, chapters, more };
+  const activeTagIds = activeTags.map((tag) => tag.id);
+  const chapters = await getChapters(keyword, activeTagIds, lastCursor);
+  return { sessionId, activeTags, allTags, chapters, more };
 }
 
 export function ServerComponent({
@@ -43,7 +43,11 @@ export function ServerComponent({
   const chapters = loaderData.chapters;
   return (
     <SidebarProvider>
-      <AppSidebar activeTags={loaderData.activeTags} />
+      <AppSidebar
+        activeTags={loaderData.activeTags}
+        allTags={loaderData.allTags}
+        sessionId={loaderData.sessionId}
+      />
       <SidebarTrigger />
       <div className="w-screen flex flex-col items-center">
         <div className="flex flex-col gap-4 m-10 max-w-md">

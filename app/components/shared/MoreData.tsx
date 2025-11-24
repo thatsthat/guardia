@@ -36,7 +36,6 @@ export function MoreData({ chapters, cursor, more }: PropsType) {
   };
 
   useEffect(() => {
-    console.log("iepiep");
     if (chapters.length) {
       if (more === "1") {
         setChaptersList((prev) => [...prev, ...chapters]);

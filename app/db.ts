@@ -37,23 +37,21 @@ export async function enableTag(sessionId: string, tagId: number) {
 }
 
 export async function disableTag(sessionId: string, tagId: number) {
-  await prisma.session.upsert({
+  await prisma.session.update({
     where: { session_uid: sessionId },
-    update: {
+    data: {
       tags: {
         disconnect: [{ id: tagId }],
-      },
-    },
-    create: {
-      session_uid: sessionId,
-      tags: {
-        connect: [{ id: tagId }],
       },
     },
   });
 }
 
-export async function getChapters(keyword: string, cursor: string | null) {
+export async function getChapters(
+  keyword: string,
+  activeTagIds: number[],
+  cursor: string | null
+) {
   const chapters = await prisma.chapter.findMany({
     ...(cursor && {
       skip: 1,
@@ -62,8 +60,30 @@ export async function getChapters(keyword: string, cursor: string | null) {
       },
     }),
     take: 10,
-    where: keyword ? { title: { contains: keyword, mode: "insensitive" } } : {},
-    select: { id: true, aired: true, title: true, url: true, summary: true },
+    where: keyword
+      ? {
+          title: { contains: keyword, mode: "insensitive" },
+          tags: {
+            some: {
+              id: { in: activeTagIds },
+            },
+          },
+        }
+      : {
+          tags: {
+            some: {
+              id: { in: activeTagIds },
+            },
+          },
+        },
+    select: {
+      id: true,
+      aired: true,
+      title: true,
+      url: true,
+      summary: true,
+      tags: true,
+    },
   });
   return chapters;
 }
