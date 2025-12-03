@@ -52,7 +52,7 @@ export async function disableTag(sessionId: string, tagId: number) {
 export async function getChapters(
   keyword: string,
   activeTagIds: number[],
-  cursor: string | null
+  cursor: string | null,
 ) {
   const chapters = await prisma.chapter.findMany({
     ...(cursor && {
@@ -65,18 +65,18 @@ export async function getChapters(
     where: keyword
       ? {
           title: { contains: keyword, mode: "insensitive" },
-          tags: {
-            some: {
-              id: { in: activeTagIds },
+          AND: activeTagIds.map((id) => ({
+            tags: {
+              some: { id },
             },
-          },
+          })),
         }
       : {
-          tags: {
-            some: {
-              id: { in: activeTagIds },
+          AND: activeTagIds.map((id) => ({
+            tags: {
+              some: { id },
             },
-          },
+          })),
         },
     select: {
       id: true,
