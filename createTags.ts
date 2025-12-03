@@ -1,4 +1,4 @@
-import { chapters } from "./tags2.ts";
+import { chapters } from "./tags3.ts";
 import { PrismaClient, Prisma } from "./app/generated/prisma/client.ts";
 
 const prisma = new PrismaClient();
@@ -29,7 +29,7 @@ console.log(finalTags);
       },
       data: {
         tags: {
-          connect: [{ id: +chapter.periodId }],
+          connect: [{ id: +chapter.areaId }],
         },
       },
     });
