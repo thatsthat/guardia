@@ -12,5 +12,4 @@ export async function updateTag(formData: FormData) {
   } else {
     await enableTag(sessionId, tagId);
   }
-  console.log(formData.get("intent"));
 }

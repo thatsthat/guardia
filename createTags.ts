@@ -1,7 +1,7 @@
-import { chapters } from "./tags.ts";
-//import { PrismaClient } from "./app/generated/prisma/client.ts";
+import { chapters } from "./tags2.ts";
+import { PrismaClient, Prisma } from "./app/generated/prisma/client.ts";
 
-//const prisma = new PrismaClient();
+const prisma = new PrismaClient();
 
 /* const empty = [];
 
@@ -23,18 +23,15 @@ console.log(finalTags);
 (async () => {
   // Assign the tags to each chapter
   for (const chapter of chapters) {
-    for (const tag of chapter.tags) {
-      console.log(tag);
-      await prisma.chapter.update({
-        where: {
-          id: chapter.id,
+    await prisma.chapter.update({
+      where: {
+        id: +chapter.fragmentId,
+      },
+      data: {
+        tags: {
+          connect: [{ id: +chapter.periodId }],
         },
-        data: {
-          tags: {
-            connect: [{ name: tag }],
-          },
-        },
-      });
-    }
+      },
+    });
   }
 })();

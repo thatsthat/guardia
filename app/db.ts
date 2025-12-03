@@ -8,6 +8,8 @@ export async function listAllTags() {
 }
 
 export async function getActiveTags(uid: string) {
+  if (uid === undefined) return [];
+
   const session = await prisma.session.findUnique({
     where: {
       session_uid: uid,

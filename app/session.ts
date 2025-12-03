@@ -1,5 +1,6 @@
 import { type MiddlewareFunction } from "react-router";
 import { createCookieSessionStorage } from "react-router";
+import { sessionContext } from "~/context";
 
 export const storage = createCookieSessionStorage({
   cookie: {
@@ -13,15 +14,15 @@ export const storage = createCookieSessionStorage({
 });
 
 export const sessionMiddleware: MiddlewareFunction<Response> = async (
-  { request },
-  next
+  { request, context },
+  next,
 ) => {
   let cookieHeader = request.headers.get("Cookie"); // read cookie header
   let session = await storage.getSession(cookieHeader); // parse cookie header
-  if (!session.has("_id")) {
-    session.set("_id", crypto.randomUUID()); // if no id found, create one
-    const response = await next();
-    response.headers.append("Set-Cookie", await storage.commitSession(session));
-    return response;
-  }
+  if (!session.has("_id")) session.set("_id", crypto.randomUUID()); // if no id found, create one
+  context.set(sessionContext, session);
+  const response = await next();
+  const cookieData = await storage.commitSession(session);
+  response.headers.append("Set-Cookie", cookieData);
+  return response;
 };

@@ -7,6 +7,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/shared/app-sidebar";
 import { storage } from "../session";
 import { listAllTags, getActiveTags, getChapters } from "../db";
+import { sessionContext } from "~/context";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -21,18 +22,25 @@ export async function action({ request }: Route.ActionArgs) {
   return redirect(`/?keyword=${encodeURIComponent(keyword)}`);
 }
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader({ request, context }: Route.LoaderArgs) {
   const url = new URL(request.url);
   const keyword = url.searchParams.get("keyword") ?? "";
+  const sessionData = context.get(sessionContext);
+  // If active tags updated, rest cursor and more parameters
+  if (request.headers.get("rsc-action-id")) {
+    url.searchParams.delete("cursor");
+    url.searchParams.delete("more");
+  }
   const lastCursor = url.searchParams.get("cursor") ?? null;
   const more = url.searchParams.get("more") ?? "0";
-  const cookieHeader = request.headers.get("Cookie"); // read cookie header
-  const session = await storage.getSession(cookieHeader); // parse cookie header
-  const sessionId = session.get("_id");
+  //const cookieHeader = request.headers.get("Cookie"); // read cookie header
+  //const session = await storage.getSession(cookieHeader); // parse cookie header
+  const sessionId = sessionData!.get("_id");
   const allTags = await listAllTags();
   const activeTags = await getActiveTags(sessionId);
   const activeTagIds = activeTags.map((tag) => tag.id);
   const chapters = await getChapters(keyword, activeTagIds, lastCursor);
+  //console.log(sessionId)
   return { sessionId, activeTags, allTags, chapters, more };
 }
 

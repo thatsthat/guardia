@@ -8,7 +8,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
+import { Calendar, Home, Inbox, Search, Settings, Check } from "lucide-react";
 
 import { updateTag } from "~/updateTag";
 import { SubmitButton } from "./submitButton";
